@@ -4,8 +4,7 @@ import {
   DASHBOARD_FOCUS_INDEX,
 } from "../constants";
 import { getStackResources } from "../services/stackResources";
-import { lambdaStatisticsModal } from "../modals/lambdaStatisticsModal";
-import { lambdaInvokeModal } from "../modals/lambdaInvokeModal";
+import { lambdaStatisticsModal, lambdaInvokeModal } from "../modals";
 
 const contrib = require("blessed-contrib");
 const open = require("open");
@@ -196,13 +195,11 @@ class resourceTable {
       allFunctions.push(...functions);
       marker = response.NextMarker;
     }
-    this.lambdaFunctions = allFunctions.map((map, func) => {
+    this.lambdaFunctions = allFunctions.reduce((map, func) => {
       // eslint-disable-next-line no-param-reassign
       map[func.FunctionName] = func;
       return map;
     }, {});
-
-    console.log(this.lambdaFunctions);
   }
 
   async updateData() {
